@@ -10,5 +10,5 @@ web.xml
 가로챈 요청은 -> servlet-context.xml 로 전달됨
 
 <div>
-  <img src="https://"
+  <img src="https://i.imgur.com/3ZwJCKt.png" alt="">
 </div>
