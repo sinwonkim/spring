@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		
+	<!-- DBCP (Apache Commons Database Connection) 사용 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+        <property name="url" value="jdbc:oracle:thin:@127.0.0.1:1521:ORCL" />
+        <property name="username" value="test1"/>
+        <property name="password" value="1234"/>
+	</bean>
+	
+	<!-- ㅇ SqlSession 인스턴스를 생성하는 SqlSessionFactory 생성
+	     ㅇ Factory Pattern  적용 :: Spring 의 FactoryBean interface 구현 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" >
+		<property name="dataSource" ref="dataSource"/>
+		<property name="mapperLocations" value="classpath:mappers/*Mapper.xml"/>
+	</bean>
+
+	<!-- 인터페이스맵퍼.java스캔 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.spring.board1.mappers" />
+	</bean>
+	
+</beans>

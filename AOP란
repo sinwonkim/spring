@@ -1,0 +1,81 @@
+AOP 
+Aspect Oriented Programming
+관점 지향 프로그래밍
+
+프로그래밍 하다 보면 공통적 기능 많이 발생,  
+이러한 공통 기능 모든 모듈에 적용하기 위한 방법으로 
+상속을 이용함.
+상속도 좋은 방법이지만, JAVA에서는 다중 상속 불가능 
+그리고, 기능 구현부분에서 핵심코드와 공통기능코드가 섞여
+있어서 보기에도 불편하고, 효율성이 떨어짐
+
+이러한 이유로 AOP가 등장 
+AOP방법은 핵심 기능과 공통 기능을 분리 시켜놓고,
+공통 기능을 필요로 하는 핵심 기능들에서 사용하는 방식이다.
+(핵심기능은 변화하지만, 공통기능은 다시 적용이 가능)
+
+스프링에서 AOP 구현방법 proxy를 이용한다.
+
+client(호출부) -> proxy -> Target(핵심기능)
+
+step1. client가 프록시한테 요청해서 공통기능을 실행
+step2. 프록시가 다시 Target으로 가서 핵심기능을 실행
+step3. 다시 공통기능을 실행하기 위해, 프록시로와서 
+         공통기능 실행
+
+스프링에서 AOP구현 방식
+방법1. XML 스키마 기반의 AOP구현
+방법2. @Aspect 어노테이션 기반의 AOP 구현
+
+방법1. XML기반의 AOP구현
+<설정할 부분>
+의존설정(pom.xml)
+
+<!-- AOP -->
+<dependency>
+	<groupId>org.aspectj</groupId>
+	<artifactId>aspectjweaver</artifactId>
+	<version>1.7.4</version>
+<dependency>
+
+공통기능의 클래스 제작 - Adivce 역할 클래스 
+
+//proxy
+publci class LogAop {
+
+	//경과 시간 체크하는 공통기능 메소드
+	public Object loggerAo(ProceedingJoinPointjoinPoint) throws Throwable {
+	   //
+	}
+}
+
+XML설정 파일에 Aspect 설정
+<bean id="logAop" class="com.edu.ex.LogAop"></bean>
+<aop:config>
+	<aop:aspect id="logger" ref="logAop">
+	<aop:around pointcut-ref="publicMethod" method="loggerAop"/>
+	</aop:aspect>
+
+</aop:config>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+출처 : https://hongku.tistory.com/114
