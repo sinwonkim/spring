@@ -12,5 +12,43 @@
 			REG_DATE
 		FROM BOARD
 	</select>
-
+	
+	<insert id="boardWrite" parameterType="com.spring.board2.domain.BoardVO">
+		INSERT INTO BOARD(
+			ID,
+			WRITER,
+			TITLE,
+			CONTENT,
+			PASSWORD
+		)
+		VALUES(
+			board_seq.nextval,
+			 #{writer},
+			 #{title},
+			 #{content},
+			 #{password}
+		)
+	</insert>
+	<select id="boardDetail" resultType="com.spring.board2.domain.BoardVO" parameterType="int">
+		SELECT 	
+			ID,
+			WRITER,
+			TITLE,
+			CONTENT,
+			REG_DATE
+		FROM BOARD
+		WHERE ID = #{boardId}	
+	</select>
+	<update id="boardUpdate" parameterType="com.spring.board2.domain.BoardVO">
+		UPDATE BOARD
+		SET TITLE = #{title},
+			CONTENT = #{content}
+		WHERE ID = #{id}
+		AND PASSWORD = #{password}
+	</update>
+	<delete id="boardDelete" parameterType="com.spring.board2.domain.BoardVO">
+		DELETE BOARD
+		WHERE ID = #{id} AND PASSWORD = #{password}
+	</delete>
+	
 </mapper>

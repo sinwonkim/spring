@@ -31,7 +31,7 @@
 			</thead>
 			<tbody>
 			<c:forEach var="board" items="${boardVO}">
-				<tr>
+				<tr class="board_info" data-boardId="${board.id}">
 					<td>${board.id}</td>
 					<td>${board.writer}</td>
 					<td>${board.title}</td>
@@ -52,7 +52,11 @@
 	<script>
 	$("#write_board_btn").on("click",function(){
 		location.href="/boardWrite";
-		
+	});	
+	
+	$(".board_info").on("click",function(){
+		var boardId = $(this).attr("data-boardId");
+		location.href="/boardDetail/"+boardId;
 	});
 	
 	</script>

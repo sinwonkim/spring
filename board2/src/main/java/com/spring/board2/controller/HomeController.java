@@ -1,17 +1,15 @@
 package com.spring.board2.controller;
 
 import java.util.List;
-import java.util.Locale;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.board2.domain.BoardVO;
-import com.spring.board2.mappers.BoardMapper;
 import com.spring.board2.service.BoardService;
 
 /**
@@ -41,9 +39,40 @@ public class HomeController {
 	
 	@ResponseBody
 	@RequestMapping(value="/boardWrite", method = RequestMethod.POST)
-	public String boardWrite(BoardVO boardVO) {
-		
-		return "boardWrite";
+	public int boardWrite(BoardVO boardVO) {
+		int result = boardService.boardWrite(boardVO);
+		if(result==1) {
+			return 1;
+		}else {
+			return 0;
+		}
 	}
 	
+	@RequestMapping(value="/boardDetail/{boardId}", method = RequestMethod.GET)
+	public String boardDetail(@PathVariable int boardId,Model model) {
+		BoardVO boardVO = boardService.boardDetail(boardId);
+		model.addAttribute("boardVO", boardVO);
+		return "boardDetail";
+	}
+	
+	@RequestMapping(value="boardUpdate/{boardId}", method = RequestMethod.GET)
+	public String boardUpdate(@PathVariable int boardId,Model model) {
+		BoardVO boardVO = boardService.boardDetail(boardId);
+		model.addAttribute("boardVO", boardVO);
+		return "boardUpdate";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="boardUpdate",method = RequestMethod.POST)
+	public int boardUpdate(BoardVO boardVO) {
+		int result = boardService.boardUpdate(boardVO);
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="boardDelete",method = RequestMethod.POST)
+	public int boardDelete(BoardVO boardVO) {
+		int result = boardService.boardDelete(boardVO);
+		return result;
+	}
 }
