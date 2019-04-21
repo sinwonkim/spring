@@ -1,0 +1,30 @@
+Java Bean
+
+Spring Bean 
+Spring에서의 Bean은 애플리케이션을 구성하는 동시에 
+Spring IoC  컨테이너에 의해 관리되는 객체들을 말한다.
+Spring IoC가 관리한다는 뜻은, 객체를 생성(조립)하고,
+생명 주기를 수행하고, 의존성 주입시에 주입하는 행위를 
+말한다. 
+Spring의 Bean은 XML/Annotation에 정의된 설정을 읽고
+Spring이 생성하게 된다.
+프로그래머는 Bean을 설정할 떄에 해당 Bean의 레시피를 설정하게 된다. 
+Spring에서 POJO(plain, old java object)를 ' Beans'라고 부른다.
+Beans는 애플리케이션의 핵심을 이루는 객체이며,Spring IOC
+(Inversion of Control)컨테이너에 의해 인스턴스화,관리,생성된다.
+Beans는 우리가 컨테이너에 공급하는 설정 메타 데이터(XML파일)에 의해 생성된다.
+컨테이너는 이 메타 데이터를 통해 Bean의 생성,Bean Life
+Cycle, Bean Dependency(종속성)등을 알 수 있다.
+애플리케이션의 객체가 지정되면, 해당 객체는 getBean()
+메서드를 통해 가져올 수 있다.
+
+Spring Bean 정의
+일반적으로 XML 파일에 정의한다.
+주요속성 
+class(필수) 정규화된 자바 클래스 이름 
+id :bean의 고유 식별자 
+scope: 객체의 범위 (singleton, prototype)
+constructor-arg : 생성 시 생성자에 전달할 인수 
+property : 생성 시 bean setter에 전달할 인수 
+init method와 destroy method
+
