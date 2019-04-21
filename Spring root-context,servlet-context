@@ -1,0 +1,112 @@
+스프링 프레임워크를 사용하면서 
+root-context.xml와 
+servlet-context.xml 두파일 모두 객체(bean)을
+정의한다는 공통점이 있다
+
+root-context.xml는 
+-jsp와 관련이 없는 객체(bean)을 설정해줌 
+service,repository 
+-비즈니스 로직을 위한 설정 
+
+servlet-context.xml는 
+-jsp와 관련있는 객체(bean)을 설정 controller,MultipartResolver
+,Interceptor(로그인)등 ,
+-URI와 관련 설정을 담는 클래스는 servlet-context.xml
+-WEB Application에서 Client의 요청을 받기 위한 설정 
+
+
+
+
+-------------------root context.xml 
+
+<
+	
+	<!-- id라는 속성은 스프링 내에서 특정한 객체(빈)을 찾기 위해서 사용하는 일종의 가명(alia)에 속함  -->
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<!-- 어노테이션을 사용하지 않기떄문에 bean 객체를 직접 생성 url,username,password를 프로퍼티로 작성하면 DB에 연결되어 미리 Connection객체를 생성 
+		  그러면 DAO 에서 커넥션을 필요로 할떄마다 커넥션 풀에서 Connection을 빌려줌 -->
+	<bean id="dataSource"
+        class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+        lazy-init="false">
+ 
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/springs" />
+        <property name="username" value="root" />
+        <property name="password" value="" />
+    </bean>      
+    
+    <!--MyBatis와 스프링 연동작업에서의 핵심은 Connection을 생성하고,처리하는 sqlSessionFactory의 존재  SqlSessionFactory는 데이터베이스와의 연결과 SQL의 실행에 대한 모든것을 가진 객체 -->
+    
+   <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <property name="dataSource" ref="dataSource"></property>
+    <property name="mapperLocations" value="classpath:mappers/**/*Mapper.xml"></property> 
+	</bean>
+	
+	<!--  -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>  --생성자의 파라미터에 sqlSessionFactory 객체를 넣으라는 의미
+	</bean>
+</beans>
+
+sqlSession은 꼭 필요하지만 중복되는 코드를 모듈화 하는
+부분을 담당 
+
+SQL Mapping에 필요한 부분을 작성한 설정 파일들을
+SqlSessionFactoryBean에 저장해둠 
+그러면 sqlSession을 통해 메서드 호출만으로 쿼리를 실행할
+수 있다.
+
+어노테이션을 사용하지 않기떄문에 bean 객체를 직접 생성
+url,username,password를 프로퍼티로 작성하면 
+DB에 연결되어 미리 Connection객체를 생성 
+
+그러면 DAO 에서 커넥션을 필요로 할떄마다 
+커넥션 풀에서 Connection을 빌려줌
+
+ex)
+
+@Repository
+public class BoardDAOImpl implements BoardDAO {
+
+	@Inject
+	private SqlSession sqlSession;  ------------------------------------- SqlSession 
+	private static String namespace = "com.springS.dao.Mapper";
+	
+	// insert 생성 
+	
+	@Override
+	public void create(BoardVO vo) throws Exception {
+		sqlSession.insert(namespace+".create", vo);
+
+	}
+	
+	// select은 return값 있음
+	@Override
+	public BoardVO read(Integer bno) throws Exception {
+		return sqlSession.selectOne(namespace+".read",bno);
+	}
+
+	// update
+	@Override
+	public void update(BoardVO vo) throws Exception {
+		sqlSession.update(namespace+".update",vo);
+
+	}
+
+	// delete
+	@Override
+	public void delete(Integer bno) throws Exception {
+		sqlSession.delete(namespace+".delete",bno);
+
+	}
+
+	// select은 retrun값 있음
+	@Override
+	public List<BoardVO> listAll() throws Exception {
+		
+		return sqlSession.selectList(namespace+".listAll");
+	}
+
+}
+
+
