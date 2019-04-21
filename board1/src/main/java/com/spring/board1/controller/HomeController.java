@@ -1,8 +1,6 @@
 package com.spring.board1.controller;
 
 import java.util.List;
-import java.util.Locale;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.board1.domain.BoardVO;
-import com.spring.board1.mappers.BoardMapper;
 import com.spring.board1.service.BoardService;
 
 /**
@@ -75,8 +72,5 @@ public class HomeController {
 	public int boardDelete(BoardVO boardVO) {
 		int result = boardService.boardDelete(boardVO);
 		return result;
-	}
-	
-	
-	
+	}	
 }
